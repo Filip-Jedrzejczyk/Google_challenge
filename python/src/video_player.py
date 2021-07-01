@@ -188,24 +188,64 @@ class VideoPlayer:
         if len(l1) == 0:
             print("No search results for", search_term)
         else:
-            print("Here are results for", f"{search_term}:")
+            print("Here are the results for", f"{search_term}:")
             limit = []
             for i in range(len(l1)):
                 limit.append(str(i+1))
                 print(f"    {i+1})", l1[i].title, f"({l1[i].video_id})",  f"[{' '.join(l1[i].tags)}]")
             print("Would you like to play any of the above? If yes, specify the number of the video.")
-            print("if your answer is not a valid number, we will assume it's a no.")
+            print("If your answer is not a valid number, we will assume it's a no.")
 
-            VideoPlayer.play_video(self, l1[0].video_id)
+            val = input()
+            try:
+                int(val)
+                it_is = True
+            except ValueError:
+                it_is = False
+            if it_is:
+                val = int(val) - 1
+                if val in range(len(l1)):
+                    VideoPlayer.play_video(self, l1[val].video_id)
+                else:
+                    pass
+            else:
+                pass
 
+    def search_videos_tag(self, search_term):
+        l = self._video_library.get_all_videos()
+        l1 = []
 
-    def search_videos_tag(self, video_tag):
-        """Display all videos whose tags contains the provided tag.
+        for x in range(len(l)):
+            tytul = l[x].tags
+            tytul = list(tytul)
 
-        Args:
-            video_tag: The video tag to be used in search.
-        """
-        print("search_videos_tag needs implementation")
+            if any(search_term in s for s in tytul):
+                l1.append(l[x])
+        if len(l1) == 0:
+            print("No search results for", search_term)
+        else:
+            print("Here are the results for", f"{search_term}:")
+            limit = []
+            for i in range(len(l1)):
+                limit.append(str(i+1))
+                print(f"    {i+1})", l1[i].title, f"({l1[i].video_id})",  f"[{' '.join(l1[i].tags)}]")
+            print("Would you like to play any of the above? If yes, specify the number of the video.")
+            print("If your answer is not a valid number, we will assume it's a no.")
+
+            val = input()
+            try:
+                int(val)
+                it_is = True
+            except ValueError:
+                it_is = False
+            if it_is:
+                val = int(val) - 1
+                if val in range(len(l1)):
+                    VideoPlayer.play_video(self, l1[val].video_id)
+                else:
+                    pass
+            else:
+                pass
 
     def flag_video(self, video_id, flag_reason=""):
         """Mark a video as flagged.
